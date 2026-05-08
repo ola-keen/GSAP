@@ -1,0 +1,27 @@
+// in head tag
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+// before body tag
+<script>
+window.addEventListener("load", function() {
+  gsap.registerPlugin(ScrollTrigger);
+
+  document.querySelectorAll(".item_image-wrapper").forEach(wrapper => {
+    const img = wrapper.querySelector(".item_image");
+
+    gsap.set(img, { scale: 1.5 }); // change scale, also is recommended to upscale the input image file before embeding in the container in the project
+
+    gsap.to(img, {
+      yPercent: 30, // change direction
+      ease: "none",
+      scrollTrigger: {
+        trigger: wrapper,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true
+      }
+    });
+  });
+});
+</script>
