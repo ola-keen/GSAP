@@ -1,0 +1,41 @@
+<!-- Inside <head> tag --> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script> 
+
+<!-- Before </body> tag --> 
+<script>
+  const charMap = {
+    "Main":       "Main", <!-- if you want for seperate words or links --> 
+    "Works":      "Works",
+    "Services":   "Services",
+    "Playground": "Playground",
+    "Contact":    "Contact"
+  };
+  function scrambleText(el) {
+    const original = el.dataset.scramble || el.textContent.trim();
+    el.dataset.scramble = original;
+    const chars = (charMap[original] || original).split("");
+    const len = original.length;
+    const totalFrames = 32; <!-- animation speed --> 
+    let frame = 0;
+    if (el._scrambleTicker) gsap.ticker.remove(el._scrambleTicker);
+    el._scrambleTicker = () => {
+      let result = "";
+      for (let i = 0; i < len; i++) {
+        const revealed = i < Math.floor((frame / totalFrames) * len);
+        result += revealed
+          ? original[i]
+          : chars[Math.floor(Math.random() * chars.length)];
+      }
+      el.textContent = result;
+      frame++;
+      if (frame > totalFrames) {
+        el.textContent = original;
+        gsap.ticker.remove(el._scrambleTicker);
+      }
+    };
+    gsap.ticker.add(el._scrambleTicker);
+  }
+  document.querySelectorAll(".nav-scramble").forEach(el => {
+    el.addEventListener("mouseenter", () => scrambleText(el));
+  });
+</script>
